@@ -96,6 +96,17 @@ The Delta Wing Drone will probably weigh less than 2kg (4.4 lbs) so we can use l
 
 ### Deep Dive into Motor Research
 
+Full test data for each motor series is in separate reference files:
+
+| Motor Series | File |
+|---|---|
+| FlashHobby D2830 EVO (750/850/1000/1300 KV) | [D2830_EVO.md](motors/D2830_EVO.md) |
+| FlashHobby D2836 EVO (750/850/1100/1450 KV) — **Selected** | [D2836_EVO.md](motors/D2836_EVO.md) |
+| FlashHobby D2826 EVO (930/1000/1450/2200 KV) | [D2826_EVO.md](motors/D2826_EVO.md) |
+| FlashHobby D3530 EVO (1100/1400/1700 KV) | [D3530_EVO.md](motors/D3530_EVO.md) |
+| FlashHobby 3536 EVO (910/1000/1250/1450 KV) | [3536_EVO.md](motors/3536_EVO.md) |
+| FlashHobby D3542 EVO (1000/1250/1400 KV) | [D3542_EVO.md](motors/D3542_EVO.md) |
+
 #### D2830 EVO Motor Test Data
 
 | Item No. | Volts (V) | Prop | Throttle (%) | Current (A) | Power (W) | Thrust (g) | RPM | Efficiency (g/W) | Temp (°C) |
