@@ -48,16 +48,16 @@ We are planning a twin motor delta wing design with VTOL capability. Target wing
 
 | Category | Rule of Thumb | Explanation |
 |----------|---------------|-------------|
-| Thrust-to-weight | ≥2:1 total thrust | Total vertical motor thrust must be at least 2× total weight to handle safe takeoff, hover, and basic maneuvering with margin |
-| Motor sizing | 1 motor per 500–1000g (for lift motors) | Balance motor weight and thrust. For endurance, use fewer, larger motors instead of many small ones |
+| [Thrust-to-weight](https://discuss.ardupilot.org/t/thrust-to-weight-ratio/55253/1) | ≥2:1 total thrust | Total vertical motor thrust must be at least 2× total weight to handle safe takeoff, hover, and basic maneuvering with margin |
+| [Motor sizing](https://www.reddit.com/r/fpv/comments/12buu69/what_consumes_more_power_hovering_or_chill_fly/) | 1 motor per 500–1000g (for lift motors) | Balance motor weight and thrust. For endurance, use fewer, larger motors instead of many small ones |
 | Prop size | Larger, slower props = more efficient | 10–13" props on 4S–6S systems are common; low pitch helps for stable VTOL and efficient hover |
 | Hover power draw | ~60–80% of full throttle current | Plan for 30–40A total current draw during hover for ~2kg drones; don't size ESCs too tight |
 | Hover time vs. cruise | Hover burns 4–6× more power | Minimize hover time — just long enough for takeoff/landing. Plan to spend 90%+ of flight in fixed-wing mode. **We are gliding in a circle.** |
-| Battery sizing | Use Li-ion for endurance, LiPo for power | Li-ion packs offer higher energy density, but lower current tolerance |
+| [Battery sizing](https://www.grepow.com/blog/li-ion-vs-lipo-battery-for-long-range-flights.html) | Use Li-ion for endurance, LiPo for power | Li-ion packs offer higher energy density, but lower current tolerance |
 | Center of gravity (CG) | At or slightly ahead of wing's aerodynamic center (for delta planes) | Crucial for smooth transition between hover and forward flight; balance battery, motors, payloads carefully |
 | Flight controller | Must support fixed wing aircraft and hovering | ArduPilot and PX4 are top choices; support vertical-to-fixed transitions, auto missions, and fallback modes |
 | ESCs | 30–60A with braking, BLHeli_S or fixed-wing ESCs | Pick reliable, smooth throttle ESCs that support brake-on-stop for folding props (reduces drag in cruise) |
-| Airframe weight budget | Frame + motors + ESCs should not exceed 35% of total drone | Save weight for battery and payload |
+| [Airframe weight budget](https://www.dronevibes.com/forums/threads/payload-as-a-of-auw.19033/) | Frame + motors + ESCs should not exceed 35% of total drone | Save weight for battery and payload |
 
 > **Airfoil note:** Need to calculate the appropriate airfoil for mostly horizontal flight with climb to offset gravity. Should consult a specialist (Peter).
 
@@ -82,15 +82,15 @@ The Delta Wing Drone will probably weigh less than 2kg (4.4 lbs) so we can use l
 
 | Vendor | Motor | KV | Battery / Max Thrust | Weight (g) | Total Cost (2x, USD) |
 |--------|-------|----|----------------------|------------|----------------------|
-| Amazon | 2814 | 1000 KV | 2–4S / unknown | 52g | $42 |
-| Amazon | FLASH HOBBY D2830 | 1000 KV | 2–4S / 890g | 52g | $38 |
-| Amazon | FLASH HOBBY D3542 | 1000 KV | 2–5S / 1260g | 130g | $46 |
-| Amazon | FLASH HOBBY D3542 | 1450 KV | 2–5S / 1260g | 130g | $46 |
-| Amazon | FLASH HOBBY D2830 EVO | 1000 KV | 2–4S / 930g | 68.1g | $40 |
+| [Amazon](https://www.amazon.com/Brushless-Thrust-Electric-Controller-1000KV/dp/B09YRP5RDW) | 2814 | 1000 KV | 2–4S / unknown | 52g | $42 |
+| [Amazon](https://www.amazon.com/FlashHobby-Brushless-Aircraft-Helicopter-Outrunner/dp/B089Y9KYY4) | FLASH HOBBY D2830 | 1000 KV | 2–4S / 890g | 52g | $38 |
+| [Amazon](https://www.amazon.com/FLASH-HOBBY-Brushless-Multicopter-Fixed-Wing/dp/B08B1FMYCF) | FLASH HOBBY D3542 | 1000 KV | 2–5S / 1260g | 130g | $46 |
+| [Amazon](https://www.amazon.com/FLASH-HOBBY-Brushless-Multicopter-Fixed-Wing/dp/B08B1FMYCF) | FLASH HOBBY D3542 | 1450 KV | 2–5S / 1260g | 130g | $46 |
+| [FlashHobby](https://www.flashhobby.com/2830-evo-fixed-wing-motor.html) | FLASH HOBBY D2830 EVO | 1000 KV | 2–4S / 930g | 68.1g | $40 |
 | — | FlashHobby D4260 EVO | 600 KV | 5–6S / 2000g | — | — |
-| Amazon | D3548 | 790 KV | 3–5S / 1650g | 156g | $40 |
-| Amazon | D2836 | 1100 KV | 2–4S / 1130g | 72g | $38 |
-| **Amazon** | **D2836 850KV** | **850 KV** | **2–4S / 850g** | **72g** | **$38** |
+| [Amazon](https://www.amazon.com/FlashHobby-D3548-Brushless-Multicopters-Helicopter/dp/B08B1D6GJD) | D3548 | 790 KV | 3–5S / 1650g | 156g | $40 |
+| [Amazon](https://www.amazon.com/FlashHobby-Brushless-Aircraft-Helicopter-Outrunner/dp/B089YJ52JC) | D2836 | 1100 KV | 2–4S / 1130g | 72g | $38 |
+| **[Amazon](https://www.amazon.com/FlashHobby-Brushless-Aircraft-Helicopter-Outrunner/dp/B089YN3DBR)** | **D2836 850KV** | **850 KV** | **2–4S / 850g** | **72g** | **$38** |
 
 ---
 
@@ -113,8 +113,8 @@ Full test data for each motor series is in separate reference files:
 We need a 50A ESC with advanced programming features to tune for endurance. Any BLHeli-based ESC will work.
 
 **Options:**
-- BLHeli RC Brushless ESC (12A–80A range) — budget option
-- HGLRC Specter 90A 8S BLHeli32 — high-performance option
+- [BLHeli RC Brushless ESC (12A–80A range)](https://www.amazon.com/Brushless-Electric-Controller-Quadcopter-Multi-axis/dp/B0DDKK8CR7) — budget option
+- [HGLRC Specter 90A 8S BLHeli32](https://www.amazon.com/HGLRC-90A-ESC-High-Performance-Professional/dp/B0DQKS5Z63) — high-performance option
 
 ---
 
@@ -124,17 +124,17 @@ We want a PX4-based flight controller.
 
 | Flight Controller | Notes |
 |-------------------|-------|
-| SpeedyBee F405 WING APP | Limited — non-native VTOL support |
-| **Pixhawk 6C** | **Good option. Newer, info harder to find. ~$300** |
+| [SpeedyBee F405 WING APP](https://www.speedybee.com/speedybee-f405-wing-app-fixed-wing-flight-controller/) | Limited — non-native VTOL support |
+| **[Pixhawk 6C](https://www.amazon.com/gp/product/B07NRMFTXL)** | **Good option. Newer, info harder to find. ~$300** |
 | Pixhawk 4 | Good option. Well documented for VTOL. Expensive. |
 | Pixhawk 2.4.8 | ~$209 |
-| T1 VTOL FX-405 (with GPS & PMU) | Affordable, that's about it |
+| [T1 VTOL FX-405 (with GPS & PMU)](https://www.heewing.com/products/fx-405-fc-gps-pmu) | Affordable, that's about it |
 
 Required sensors: GPS, barometer
 
 **Setup Videos:**
-- (1/5) PixHawk Video Series - Simple initial setup, config and calibration
-- PixHawk/ArduCopter for Beginners (2023): Flashing the PixHawk 6C and basic setup steps
+- [(1/5) PixHawk Video Series — Simple initial setup, config and calibration](https://www.youtube.com/watch?v=uH2iCRA9G7k&list=PLYsWjANuAm4r4idFZY24pP6s1K6ABMU0p)
+- [PixHawk/ArduCopter for Beginners (2023): Flashing the PixHawk 6C and basic setup steps](https://www.youtube.com/watch?v=_ketmb8u2UI)
 
 ---
 
@@ -142,8 +142,8 @@ Required sensors: GPS, barometer
 
 Already have a **RadioMaster Boxer** radio controller. Just need an ELRS receiver.
 
-- **Receiver:** RadioMaster RP3 — longest range ELRS nano RX
-- **Module:** RadioMaster Nomad — supports both 2.4GHz and 900MHz
+- **Receiver:** [RadioMaster RP3](https://www.amazon.com/SoloGood-RadioMaster-RP3-ExpressLRS-Quadcopter/dp/B0BGBKG635) — longest range ELRS nano RX
+- **Module:** [RadioMaster Nomad](https://radiomasterrc.com/collections/nomad/products/nomad-dual-1-watt-gemini-xrossband-expresslrs-module) — supports both 2.4GHz and 900MHz
 
 ### Frequency Plan
 
