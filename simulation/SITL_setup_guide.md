@@ -5,8 +5,6 @@
 **Date:** 02/19/26
 **Course:** URMP
 
-> **Note:** This guide is a work in progress and subject to change. Steps may need refinement as the setup is tested further.
-
 ---
 
 ## Table of Contents
@@ -15,8 +13,7 @@
 2. [What's MAVLink, PX4, Gazebo, QGC?](#whats-mavlink-px4-gazebo-qgc)
 3. [Installation](#installation)
    - [QGroundControl](#qgroundcontrol-installation)
-   - [Gazebo Jetty](#gazebo-binary-installation)
-   - [PX4](#installing-px4)
+   - [PX4 (includes Gazebo Harmonic)](#installing-px4)
 4. [Creating a Custom PX4 Gazebo Drone Model](#creating-a-custom-px4-gazebo-drone-model)
 5. [Running Your Custom PX4 Drone Model](#running-your-custom-px4-drone-model)
 
@@ -24,18 +21,20 @@
 
 ## Purpose of this Guide
 
-This guide explains how to set up and run a drone simulation using PX4, Gazebo Jetty, and QGroundControl on Ubuntu 24.04. It walks through the installation process and shows how the programs connect and work together.
+This guide explains how to set up and run a drone simulation using PX4, Gazebo Harmonic, and QGroundControl on Ubuntu 24.04. It walks through the installation process and shows how the programs connect and work together.
 
 This guide is meant for beginners who want to test and control a drone in a virtual environment without using real hardware.
 
 **Assumed setup:**
 - Ubuntu 24.04 (Noble)
-- Gazebo 10 (Jetty)
+- Gazebo Harmonic (gz-harmonic, installed automatically by PX4's setup script)
 - PX4 in Software-In-The-Loop (SITL) mode
 - QGroundControl via official AppImage
 - RadioMaster Boxer transmitter connected by USB (joystick mode)
 - PX4 and QGC communicating locally over UDP on port 14550
 - No physical flight controller connected
+
+> **Note:** PX4's `ubuntu.sh` script installs **Gazebo Harmonic** (`gz-harmonic`), not Jetty. Do not manually install `gz-jetty` before running PX4 setup — mixing Harmonic and Jetty libraries causes CMake link errors. If both are installed, set `GZ_DISTRO=harmonic` in your build command.
 
 ---
 
@@ -65,7 +64,7 @@ In simulation, QGC connects to PX4 and lets you see everything the drone is doin
 
 ### Gazebo
 
-Gazebo 10 (Jetty) is a robotics simulation software that creates a realistic virtual environment for testing robots and drones. It simulates physics such as gravity, collisions, inertia, and aerodynamics, allowing a drone to behave as if it were flying in the real world.
+Gazebo Harmonic is a robotics simulation software that creates a realistic virtual environment for testing robots and drones. It simulates physics such as gravity, collisions, inertia, and aerodynamics, allowing a drone to behave as if it were flying in the real world.
 
 In a PX4 simulation setup, Gazebo acts as the virtual world — it models the drone's body, motors, sensors, and environment. When PX4 sends motor commands, Gazebo calculates how the drone should move based on physics and updates its position accordingly.
 
@@ -138,42 +137,9 @@ QGC should now launch and be ready to connect to PX4 (SITL or hardware such as a
 
 ---
 
-### Gazebo Binary Installation
-
-Jetty binaries are provided for Ubuntu Noble (24.04) and are hosted in the `packages.osrfoundation.org` repository.
-
-#### Step 1 — Install prerequisites
-
-```bash
-sudo apt-get update
-sudo apt-get install curl lsb-release gnupg
-```
-
-#### Step 2 — Add the OSRF repository and install Gazebo Jetty
-
-```bash
-sudo curl https://packages.osrfoundation.org/gazebo.gpg \
-  --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] \
-  https://packages.osrfoundation.org/gazebo/ubuntu-stable \
-  $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-
-sudo apt-get update
-sudo apt-get install gz-jetty
-```
-
-#### Step 3 — Verify installation
-
-```bash
-gz sim
-```
-
-If the Gazebo window opens, installation is complete. You can now proceed with PX4 setup.
-
----
-
 ### Installing PX4
+
+PX4's setup script (`ubuntu.sh`) automatically installs **Gazebo Harmonic** and all simulation dependencies. You do not need to install Gazebo separately.
 
 #### Step 1 — Install required tools
 
@@ -197,16 +163,20 @@ cd PX4-Autopilot
 bash ./Tools/setup/ubuntu.sh
 ```
 
-Let it finish. This installs all simulation dependencies automatically. It may install extra or older packages — this is expected and prevents build errors. Close the terminal and open a new one when done.
+This installs all dependencies including **Gazebo Harmonic** (`gz-harmonic`). It may install extra or older packages — this is expected. Close and reopen your terminal when done so group and environment changes take effect.
 
 #### Step 4 — Launch the simulation (X500 quadcopter test)
 
 ```bash
-cd PX4-Autopilot
-make px4_sitl gz_x500
+cd ~/PX4-Autopilot
+GZ_DISTRO=harmonic make px4_sitl gz_x500
 ```
 
-This will start PX4, launch Gazebo Jetty, and spawn the X500 quadcopter.
+> **Why `GZ_DISTRO=harmonic`?** If your system has both `gz-harmonic` and `gz-jetty` installed (which can happen if you previously installed Gazebo manually), CMake picks up Jetty's unversioned libraries and fails with a link error. Setting `GZ_DISTRO=harmonic` forces all Gazebo targets to use the Harmonic (version 8) libraries that PX4 expects.
+>
+> If you only have `gz-harmonic` installed, this variable is still safe to set — it does no harm.
+
+This command will build PX4, launch Gazebo Harmonic, and spawn the X500 quadcopter. The first build takes several minutes.
 
 #### Step 5 — Open QGroundControl
 
@@ -292,7 +262,7 @@ Change it to:
 
 ```bash
 cd ~/PX4-Autopilot
-make px4_sitl gz_x500
+GZ_DISTRO=harmonic make px4_sitl gz_x500
 ```
 
 This starts PX4, Gazebo, and a default quadcopter. Leave this terminal running.
@@ -320,14 +290,14 @@ ninja: error: unknown target 'gz_my_vtol_drone'
 
 This is because PX4 launch commands only work for **registered airframe targets**, such as:
 ```bash
-make px4_sitl gz_x500
-make px4_sitl gz_standard_vtol
-make px4_sitl gz_tiltrotor
+GZ_DISTRO=harmonic make px4_sitl gz_x500
+GZ_DISTRO=harmonic make px4_sitl gz_standard_vtol
+GZ_DISTRO=harmonic make px4_sitl gz_tiltrotor
 ```
 
 Your model is currently only a Gazebo object — PX4 doesn't know how to launch it automatically yet. Later we can create a custom PX4 airframe, which will allow:
 ```bash
-make px4_sitl gz_my_vtol_drone
+GZ_DISTRO=harmonic make px4_sitl gz_my_vtol_drone
 ```
 
 ### Quick Check
@@ -354,7 +324,7 @@ meshes/
 
 ```bash
 cd ~/PX4-Autopilot
-PX4_GZ_MODEL_NAME=my_vtol_drone make px4_sitl gz_standard_vtol
+PX4_GZ_MODEL_NAME=my_vtol_drone GZ_DISTRO=harmonic make px4_sitl gz_standard_vtol
 ```
 
 This tells PX4 to control the model named `my_vtol_drone`. If no drone appears immediately, that is normal — proceed to step 2.
