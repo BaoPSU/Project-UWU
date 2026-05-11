@@ -1,0 +1,102 @@
+#!/bin/sh
+#
+# @name Gazebo Duo Tailsitter
+#
+# @type VTOL Tailsitter
+#
+# @output Motor1 right motor (CCW)
+# @output Motor2 left motor (CW)
+# @output Servo1 right elevon
+# @output Servo2 left elevon
+#
+
+. ${R}etc/init.d/rc.vtol_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=gz_duo_tailsitter}
+
+param set-default SIM_GZ_EN 1
+
+param set-default MAV_TYPE 19
+
+param set-default CA_AIRFRAME 4
+
+param set-default CA_ROTOR_COUNT 2
+param set-default CA_ROTOR0_PX 0
+param set-default CA_ROTOR0_PY 0.3
+param set-default CA_ROTOR0_KM -0.05
+param set-default CA_ROTOR1_PX 0
+param set-default CA_ROTOR1_PY -0.3
+param set-default CA_ROTOR1_KM 0.05
+
+param set-default CA_SV_CS_COUNT 2
+param set-default CA_SV_CS0_TYPE 6
+param set-default CA_SV_CS0_TRQ_P 0.5
+param set-default CA_SV_CS0_TRQ_R 0.5
+param set-default CA_SV_CS1_TYPE 5
+param set-default CA_SV_CS1_TRQ_P 0.5
+param set-default CA_SV_CS1_TRQ_R -0.5
+
+param set-default SIM_GZ_EC_FUNC1 101
+param set-default SIM_GZ_EC_FUNC2 102
+param set-default SIM_GZ_EC_MIN1 10
+param set-default SIM_GZ_EC_MIN2 10
+param set-default SIM_GZ_EC_MAX1 1500
+param set-default SIM_GZ_EC_MAX2 1500
+
+param set-default SIM_GZ_SV_FUNC1 201
+param set-default SIM_GZ_SV_FUNC2 202
+
+param set-default VT_TYPE 0
+param set-default VT_MOT_COUNT 2
+param set-default VT_ELEV_MC_LOCK 0
+param set-default VT_FW_DIFTHR_EN 7
+param set-default VT_FW_DIFTHR_S_Y 0.3
+param set-default VT_B_TRANS_DUR 5
+param set-default VT_F_TRANS_DUR 1.5
+param set-default VT_ARSP_TRANS 6
+
+param set-default FW_AIRSPD_MAX 12
+param set-default FW_AIRSPD_MIN 7
+param set-default FW_AIRSPD_TRIM 10
+param set-default FW_PSP_OFF 5
+param set-default FW_YR_I 0
+param set-default FW_YR_FF 0
+param set-default FW_THR_TRIM 0.5
+param set-default FW_THR_MAX 0.8
+param set-default FW_THR_MIN 0.1
+
+param set-default MC_AIRMODE 2
+param set-default MC_PITCH_P 5
+param set-default MC_PITCHRATE_P 0.3
+param set-default MC_ROLL_P 3
+param set-default MC_ROLLRATE_P 0.3
+param set-default MAN_ARM_GESTURE 0
+
+param set-default EKF2_FUSE_BETA 0
+
+# Tailsitter can be at any pitch/roll angle — disable attitude failure detector limits
+param set-default FD_FAIL_P 180
+param set-default FD_FAIL_R 180
+
+# Disable airspeed sensor requirement (no pitot tube in sim)
+param set-default SYS_HAS_NUM_ASPD 0
+
+# Disable supply voltage check (sim has no battery)
+param set-default CBRK_SUPPLY_CHK 894281
+
+# Allow arming without RC transmitter (use QGC joystick or auto modes)
+param set-default COM_RC_IN_MODE 1
+
+# Use automatic mag fusion (EKF2 will converge ~30-60s after spawn)
+param set-default EKF2_MAG_TYPE 0
+
+# Conservative yaw rate tuning for nose-up hover
+param set-default MC_YAW_P 2.0
+param set-default MC_YAWRATE_P 0.2
+param set-default MC_YAWRATE_I 0.1
+param set-default MC_YAWRATE_D 0.0
+
+# Minimum time (s) in transition before switching modes
+param set-default VT_TRANS_MIN_TM 2.0
